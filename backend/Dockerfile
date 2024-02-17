@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir Flask Pillow Flask-CORS
+RUN pip install -r requirements.txt
 
 # Make port 5555 available to the world outside this container
 EXPOSE 5555
