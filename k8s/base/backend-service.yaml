@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-resizer-back-service
+spec:
+  type: ClusterIP
+  selector:
+    app: image-resizer-back
+  ports:
+    - protocol: TCP
+      port: 5555
+      targetPort: 5555

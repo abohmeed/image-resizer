@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resize Tool</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .loader {
+            border: 10px solid #f3f3f3;
+            /* Light grey */
+            border-top: 10px solid #3498db;
+            /* Blue */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+            display: none;
+            /* Hidden by default */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Upload an image to resize</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="imageFile">Image File:</label>
+                <input type="file" class="form-control-file" id="imageFile" name="image" required>
+            </div>
+            <div class="form-group">
+                <label for="width">Width:</label>
+                <input type="number" class="form-control" id="width" name="width" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div class="loader" id="loader"></div>
+        <br>
+        <img id="resultImage" style="max-width: 100%;" />
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#uploadForm').submit(function (e) {
+                e.preventDefault();
+                $('#loader').show(); // Show the loader
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: 'http://image-resizer-back-service:5555/resize',
+                    type: 'POST',
+                    data: formData,
+                    xhrFields: {
+                        responseType: 'blob' // Important for handling the binary response
+                    },
+                    success: function (data) {
+                        $('#loader').hide(); // Hide the loader
+                        var url = window.URL.createObjectURL(data);
+                        $('#resultImage').attr('src', url);
+                    },
+                    error: function (xhr, status, error) {
+                        $('#loader').hide(); // Ensure loader is hidden on error
+                        console.error("Error occurred: " + status + "\nError: " + error);
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

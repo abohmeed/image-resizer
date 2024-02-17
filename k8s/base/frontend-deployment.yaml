@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-resizer-front-deployment
+spec:
+  replicas: 2 # example number of replicas
+  selector:
+    matchLabels:
+      app: image-resizer-front
+  template:
+    metadata:
+      labels:
+        app: image-resizer-front
+    spec:
+      containers:
+      - name: image-resizer-front
+        image: afakharany/image-resizer-front
+        ports:
+        - containerPort: 80 # assuming your frontend listens on port 80

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-resizer-back-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: image-resizer-back
+  template:
+    metadata:
+      labels:
+        app: image-resizer-back
+    spec:
+      containers:
+      - name: image-resizer-back
+        image: afakharany/image-resizer-back
+        ports:
+        - containerPort: 5555
